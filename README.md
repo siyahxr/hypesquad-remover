@@ -47,4 +47,4 @@ This project is developed entirely for **educational and practical purposes**. S
 ## 👨‍💻 Developer & Community
 
 This project is specially designed for the **StarHUB** community. 
-To join us: [StarHUB Discord Server](https://discord.gg/starhub)
+To join us: [StarHUB Discord Server](https://discord.gg/starhub) 
