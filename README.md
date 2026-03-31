@@ -19,7 +19,7 @@ A modern and sleek Google Chrome / Microsoft Edge extension that allows you to c
 ## 📸 Screenshots
 
 *(You can add your extension screenshots uploaded to GitHub here)*
-> `<img src="screenshot-link.png" width="300">`
+> <img src="screenshot-link.png" width="300">
 
 ## 🛠️ Installation Guide (Developer Mode)
 
