@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bravery-color: #9b84ee;
+            --brilliance-color: #f47b67;
+            --balance-color: #45ddc0;
+            --remove-color: #ed4245;
+            --bg-color: #0a0a0a;
+            --primary-accent: #5865f2;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            width: 320px;
+            padding: 0;
+            margin: 0;
+            background-color: var(--bg-color);
+            font-family: 'Outfit', sans-serif;
+            color: white;
+            border-radius: 16px;
+            background-image: linear-gradient(135deg, rgba(12, 12, 12, 0.98), rgba(0, 0, 0, 0.98)), url('arkaplan.gif');
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 420px;
+            position: relative;
+        }
+
+        /* Loading Screen */
+        #loader {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #loader img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 40px rgba(88, 101, 242, 0.2);
+            animation: bounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .spinner {
+            margin-top: 25px;
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary-accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes bounceIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .container {
+            padding: 30px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            opacity: 0;
+            transform: scale(0.98);
+            transition: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Language Select */
+        .lang-switcher {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 6px;
+            z-index: 1001;
+        }
+
+        .lang-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: rgba(255, 255, 255, 0.4);
+            padding: 5px 10px;
+            font-size: 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 700;
+        }
+
+        .lang-btn.active {
+            background: var(--primary-accent);
+            color: white;
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);
+        }
+
+        .logo {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin: 0 auto 20px;
+            animation: logoPulse 3s infinite ease-in-out;
+            object-fit: cover;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 255, 255, 0.05); }
+            50% { transform: scale(1.05); box-shadow: 0 0 35px rgba(255, 255, 255, 0.15); }
+        }
+
+        h3 {
+            margin: 0 0 25px 0;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff, #999);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Badge Grid */
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .badge-btn {
+            aspect-ratio: 1;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .badge-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+            transition: 0.3s;
+        }
+
+        .badge-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -150%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: 0.6s;
+        }
+
+        .badge-btn:hover {
+            transform: translateY(-8px) scale(1.1);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .badge-btn:hover::after {
+            left: 150%;
+        }
+
+        #bravery:hover { box-shadow: 0 10px 30px rgba(155, 132, 238, 0.35); border-color: var(--bravery-color); }
+        #brilliance:hover { box-shadow: 0 10px 30px rgba(244, 123, 103, 0.35); border-color: var(--brilliance-color); }
+        #balance:hover { box-shadow: 0 10px 30px rgba(69, 221, 192, 0.35); border-color: var(--balance-color); }
+
+        #remove {
+            width: 100%;
+            padding: 14px;
+            background: transparent;
+            border: 1px dashed rgba(237, 66, 69, 0.4);
+            color: var(--remove-color);
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        #remove:hover {
+            background: rgba(237, 66, 69, 0.1);
+            border-style: solid;
+            box-shadow: 0 0 20px rgba(237, 66, 69, 0.2);
+        }
+
+        #token-fallback {
+            margin-top: 15px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            font-size: 11px;
+            outline: none;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        #manual-toggle {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            margin-top: 10px;
+            text-decoration: underline;
+        }
+
+        .footer {
+            padding: 20px 0;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0.5;
+            transition: 0.4s;
+            cursor: pointer;
+            margin-top: auto;
+        }
+
+        .footer:hover {
+            opacity: 1;
+            color: var(--primary-accent);
+            text-shadow: 0 0 15px rgba(88, 101, 242, 0.6);
+        }
+
+        #status {
+            font-size: 11px;
+            margin-top: 15px;
+            font-weight: 700;
+            min-height: 16px;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="loader">
+        <img src="arkaplan.gif" alt="StarHUB Logo">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="lang-switcher">
+        <div class="lang-btn active" id="tr">TR</div>
+        <div class="lang-btn" id="en">EN</div>
+    </div>
+
+    <div class="container" id="main-container">
+        <img src="arkaplan.gif" alt="Logo" class="logo">
+        <h3 id="ui-title">Hypesquad Panel</h3>
+
+        <div class="badge-grid">
+            <div class="badge-btn" id="bravery">
+                <img src="bravery.png" alt="Bravery">
+            </div>
+            <div class="badge-btn" id="brilliance">
+                <img src="brilliance.png" alt="Brilliance">
+            </div>
+            <div class="badge-btn" id="balance">
+                <img src="balance.png" alt="Balance">
+            </div>
+        </div>
+
+        <button id="remove">ROZETİ KALDIR</button>
+
+        <div id="token-fallback">
+            <input type="password" id="tokenInput" placeholder="MANUEL TOKEN GİRİN">
+        </div>
+
+        <div id="status"></div>
+        
+        <div id="manual-toggle">Manuel Token Girdi</div>
+
+        <div class="footer" id="starhub-link">StarHUB</div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
